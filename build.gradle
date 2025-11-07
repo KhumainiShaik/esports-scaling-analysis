@@ -1,0 +1,54 @@
+plugins {
+    id 'groovy'
+    id 'application'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)  // Specify Java 21
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.groovy:groovy-all:4.0.15'  // Updated to latest Groovy 4.x
+    implementation 'org.mongodb:mongodb-driver-sync:5.2.0'
+    implementation 'org.apache.ivy:ivy:2.5.1'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/main/groovy']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+application {
+    mainClass = 'com.agile.cloud.automation.coursework1.Task3EsportsAnalysis'
+}
+
+// Enable Groovy script execution
+tasks.register('runScript', JavaExec) {
+    description = 'Run a Groovy script'
+    group = 'application'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'groovy.ui.GroovyMain'
+    args = [file("task3_esports_analysis.groovy")]
+}
+
+// Configure all tasks to use project root directory as working directory
+tasks.withType(JavaExec) {
+    workingDir = project.rootDir
+}
+
+// Also configure the run task specifically
+run {
+    workingDir = project.rootDir
+}
